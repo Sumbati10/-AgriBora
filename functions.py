@@ -14,7 +14,7 @@ def img_predict(path, crop):
     data = load_img(path, target_size=(224, 224, 3))
     data = np.asarray(data).reshape((-1, 224, 224, 3))
     data = data * 1.0 / 255
-    model = get_model(os.path.join(BASE_DIR, 'models', 'DL_models', f'{crop}_model.h5'))
+    model = get_model(os.path.join(BASE_DIR, 'Models', 'DEEP_LEARNINGMODELS', f'{crop}_model.h5'))
     if len(crop_diseases_classes[crop]) > 2:
         predicted = np.argmax(model.predict(data)[0])
     else:
@@ -27,8 +27,8 @@ def get_diseases_classes(crop, prediction):
     return crop_classes[prediction][1].replace("_", " ")
 
 def get_crop_recommendation(item):
-    scaler_path = os.path.join(BASE_DIR, 'models', 'ML_models', 'crop_scaler.pkl')
-    model_path = os.path.join(BASE_DIR, 'models', 'ML_models', 'crop_model.pkl')
+    scaler_path = os.path.join(BASE_DIR, 'Models', 'MACHINE_LEARNING_MODELS', 'crop_scaler.pkl')
+    model_path = os.path.join(BASE_DIR, 'Models', 'MACHINE_LEARNING_MODELS', 'crop_model.pkl')
 
     with open(scaler_path, 'rb') as f:
         crop_scaler = pickle.load(f)
@@ -40,8 +40,8 @@ def get_crop_recommendation(item):
     return crops[prediction]
 
 def get_fertilizer_recommendation(num_features, cat_features):
-    scaler_path = os.path.join(BASE_DIR, 'models', 'ML_models', 'fertilizer_scaler.pkl')
-    model_path = os.path.join(BASE_DIR, 'models', 'ML_models', 'fertilizer_model.pkl')
+    scaler_path = os.path.join(BASE_DIR, 'Models', 'MACHINE_LEARNING_MODELS', 'fertilizer_scaler.pkl')
+    model_path = os.path.join(BASE_DIR, 'Models', 'MACHINE_LEARNING_MODELS', 'fertilizer_model.pkl')
     
     with open(scaler_path, 'rb') as f:
         fertilizer_scaler = pickle.load(f)
