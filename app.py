@@ -1,8 +1,13 @@
 
 
 from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
+import os, random
+from werkzeug.utils import secure_filename
 import random, os
 from werkzeug.utils import secure_filename
+from flask import session
+
 from functions import img_predict, get_diseases_classes, get_crop_recommendation, get_fertilizer_recommendation, soil_types, Crop_types, crop_list
 
 
@@ -131,7 +136,6 @@ def auth():
         email = request.form.get('email')
 
         if mode == 'signup':
-            # In demo: skip real signup, simulate success
             if password != confirm:
                 error = "Passwords do not match"
             else:
@@ -140,7 +144,7 @@ def auth():
                     return redirect(url_for('index'))
                 else:
                     error = "Only demo account allowed for signup in demo."
-        
+
         elif mode == 'login':
             if username == "demo" and password == "farm123":
                 session['user'] = username
@@ -149,6 +153,7 @@ def auth():
                 error = "Invalid credentials. Try demo / farm123"
 
     return render_template('auth.html', mode=mode, error=error)
+
 
 
 
