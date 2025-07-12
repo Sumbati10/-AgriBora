@@ -9,7 +9,7 @@ from functions import img_predict, get_diseases_classes, get_crop_recommendation
 app = Flask(__name__)
 random.seed(0)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.secret_key = 'b9ebef2dbae122fa9c4846eb2526de24'
+
 UPLOAD_FOLDER = 'uploads'
 STATIC_FOLDER = 'static'
 
