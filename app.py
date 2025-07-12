@@ -115,6 +115,26 @@ def predict_crop_ajax():
         return {'status': 'success', 'result': result}
     except Exception as e:
         return {'status': 'error', 'message': str(e)}
+	
+@app.route('/auth')
+def auth():
+    return render_template('auth.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    password = request.form['password']
+    # TODO: Add real login logic here
+    return redirect('/')
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    name = request.form['name']
+    email = request.form['email']
+    password = request.form['password']
+    # TODO: Save to DB here
+    return redirect('/')
+
 
 
 if __name__ == '__main__':
