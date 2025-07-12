@@ -14,37 +14,56 @@
 <body>
 
 	<!-- Navbar -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<a class="navbar-brand" href="/">
-				<p>AgriBora</p>
-			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav m-auto">
-					<li class="nav-item">
-						<a class="nav-link active" href="/">Home</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-							Services
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="/crop-disease">Crop Diseases Detection</a></li>
-							<li><a class="dropdown-item" href="/fertilizer-recommendation">Fertilizer Recommendation</a></li>
-							<li><a class="dropdown-item" href="/crop-recommendation">Crop Recommendation</a></li>
-							<li><a class="dropdown-item" href="/weather">Weather Forecast</a></li>
-						</ul>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/auth">Login / Signup</a>
-					</li>
-				</ul>
-			</div>
+	<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+			<p>AgriBora</p>
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav m-auto">
+				<li class="nav-item">
+					<a class="nav-link active" href="/">Home</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+						Services
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="/crop-disease">Crop Diseases Detection</a></li>
+						<li><a class="dropdown-item" href="/fertilizer-recommendation">Fertilizer Recommendation</a></li>
+						<li><a class="dropdown-item" href="/crop-recommendation">Crop Recommendation</a></li>
+						<li><a class="dropdown-item" href="/weather">Weather Forecast</a></li>
+					</ul>
+				</li>
+			</ul>
+
+			<!-- Right side: welcome + login/logout -->
+			<ul class="navbar-nav ms-auto">
+				{% if session.get('user') %}
+				<li class="nav-item">
+					<span class="nav-link text-light">👤 Welcome, <strong>{{ session['user'] }}</strong></span>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+				</li>
+				{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('auth', mode='login') }}">Login</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('auth', mode='signup') }}">Sign Up</a>
+				</li>
+				{% endif %}
+			</ul>
 		</div>
-	</nav>
+	</div>
+</nav>
+
 	
 
 	{% block content %}
