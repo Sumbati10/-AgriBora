@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather Result</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/weather.css') }}">
+</head>
+<body>
+	<div class="weather-container">
+		<div class="overlay result-box">
+			<h1>Weather in {{ weather.city }}</h1>
+			<div class="weather-details">
+				<p>🌡️ <strong>Temperature:</strong> {{ weather.temperature }}°C</p>
+				<p>💧 <strong>Humidity:</strong> {{ weather.humidity }}%</p>
+				<p>🌬️ <strong>Pressure:</strong> {{ weather.pressure }} hPa</p>
+				<p>🌥️ <strong>Description:</strong> {{ weather.description }}</p>
+				<img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Weather icon">
+			</div>
+			<br>
+			<a class="back-btn" href="/weather">🔄 Search Again</a>
+		</div>
+	</div>
+</body>
+</html>

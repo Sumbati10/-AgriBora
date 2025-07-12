@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather Checker</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/weather.css') }}">
+</head>
+<body>
+	<div class="weather-container">
+		<div class="overlay">
+			<h1>Check Current Weather</h1>
+			<form method="POST">
+				<input type="text" name="city" placeholder="Enter City Name" required>
+				<button type="submit">Get Weather</button>
+			</form>
+
+			{% if error %}
+				<p class="error">{{ error }}</p>
+			{% endif %}
+		</div>
+	</div>
+</body>
+</html>
