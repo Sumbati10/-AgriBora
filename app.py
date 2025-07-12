@@ -157,6 +157,11 @@ def auth():
 def logout():
     session.pop('user', None)
     return redirect(url_for('auth', mode='login'))
+@app.before_request
+def require_login():
+    allowed_routes = ['auth', 'static', 'logout']
+    if request.endpoint not in allowed_routes and 'user' not in session:
+        return redirect(url_for('auth', mode='login'))
 
 
 # --------------------------
