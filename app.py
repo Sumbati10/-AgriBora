@@ -131,17 +131,25 @@ def auth():
         email = request.form.get('email')
 
         if mode == 'signup':
+            # In demo: skip real signup, simulate success
             if password != confirm:
                 error = "Passwords do not match"
             else:
-                # Save user logic (to database or file) here
-                return redirect(url_for('auth', mode='login'))
-
+                if username == "demo" and password == "farm123":
+                    session['user'] = username
+                    return redirect(url_for('index'))
+                else:
+                    error = "Only demo account allowed for signup in demo."
+        
         elif mode == 'login':
-            # Validate user logic here
-            return redirect(url_for('index'))
+            if username == "demo" and password == "farm123":
+                session['user'] = username
+                return redirect(url_for('index'))
+            else:
+                error = "Invalid credentials. Try demo / farm123"
 
     return render_template('auth.html', mode=mode, error=error)
+
 
 
 
