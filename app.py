@@ -119,24 +119,34 @@ def predict_crop_ajax():
         return {'status': 'error', 'message': str(e)}
 	
 
-@app.route('/signup', methods=['POST'])
-def signup():
-    name = request.form.get('name')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    confirm_password = request.form.get('confirm_password')
+from flask import Flask, render_template, request, redirect, url_for
 
-    if not all([name, email, password, confirm_password]):
-        flash('Please fill all fields.')
-        return redirect('/auth')
+app = Flask(__name__)
 
-    if password != confirm_password:
-        flash('Passwords do not match.')
-        return redirect('/auth')
+@app.route('/auth', methods=['GET', 'POST'])
+def auth():
+    mode = request.args.get('mode', 'login')  # default to login
+    error = None
 
-    # TODO: Save to DB, check for existing email, etc.
-    flash('Signup successful!')
-    return redirect('/')
+    if request.method == 'POST':
+        mode = request.form.get('mode')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        email = request.form.get('email')
+
+        if mode == 'signup':
+            if password != confirm:
+                error = "Passwords do not match"
+            else:
+                # Save user (add your logic here)
+                return redirect(url_for('auth', mode='login'))
+        elif mode == 'login':
+            # Check user (add your logic here)
+            return redirect(url_for('index'))  # Replace with your homepage route
+
+    return render_template('auth.html', mode=mode, error=error)
+
 
 
 
