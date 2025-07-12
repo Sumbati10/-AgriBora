@@ -154,7 +154,10 @@ def auth():
 
     return render_template('auth.html', mode=mode, error=error)
 
-
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('auth', mode='login'))
 
 
 
