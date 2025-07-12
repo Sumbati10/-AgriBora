@@ -38,7 +38,7 @@ def fertilizer_recommendation():
 			num_features=to_predict_list[:-2],
 			cat_features=to_predict_list[-2:]
 		)
-		return render_template("recommend_result.html", result=result)
+		return render_template("fertilizer-recommend.html", result=result)
 	else:
 		return render_template(
 			'fertilizer-recommend.html', 
