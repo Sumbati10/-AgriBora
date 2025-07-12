@@ -1,3 +1,5 @@
+app.secret_key = 'b9ebef2dbae122fa9c4846eb2526de24'
+
 from flask import Flask, render_template, request, send_from_directory
 import random, os
 from werkzeug.utils import secure_filename
@@ -116,23 +118,24 @@ def predict_crop_ajax():
     except Exception as e:
         return {'status': 'error', 'message': str(e)}
 	
-@app.route('/auth')
-def auth():
-    return render_template('auth.html')
-
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.form['email']
-    password = request.form['password']
-    # TODO: Add real login logic here
-    return redirect('/')
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    # TODO: Save to DB here
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+
+    if not all([name, email, password, confirm_password]):
+        flash('Please fill all fields.')
+        return redirect('/auth')
+
+    if password != confirm_password:
+        flash('Passwords do not match.')
+        return redirect('/auth')
+
+    # TODO: Save to DB, check for existing email, etc.
+    flash('Signup successful!')
     return redirect('/')
 
 
