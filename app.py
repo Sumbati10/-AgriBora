@@ -143,7 +143,7 @@ def auth():
                 return redirect(url_for('auth', mode='login'))
         elif mode == 'login':
             # Check user (add your logic here)
-            return redirect(url_for('index'))  # Replace with your homepage route
+            return redirect(url_for('index.html'))  # Replace with your homepage route
 
     return render_template('auth.html', mode=mode, error=error)
 
