@@ -1,34 +1,18 @@
 {% extends "index.html" %}
 {% block content %}
-
 <style>
   .crop-bg {
     background: url('{{ url_for("static", filename="images/croprecommder.png") }}') no-repeat center center fixed;
     background-size: cover;
-    position: relative;
     padding-top: 100px;
     padding-bottom: 100px;
     min-height: 100vh;
   }
 
-  .crop-bg::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 0;
-  }
-
   .form-wrapper {
-    position: relative;
-    z-index: 1;
     max-width: 600px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
+    margin: auto;
+    background: rgba(255,255,255,0.95);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -40,28 +24,23 @@
     margin-bottom: 20px;
   }
 
-  .form-wrapper label {
-    font-weight: bold;
-  }
-
   .form-wrapper .btn {
     width: 100%;
     padding: 10px;
   }
 
   .result-box {
-    margin-top: 30px;
-    padding: 20px;
+    margin-top: 20px;
+    padding: 15px;
     background: #e8f5e9;
     border-left: 6px solid #4CAF50;
-    font-size: 18px;
-    text-align: center;
     font-weight: bold;
+    text-align: center;
   }
 
   .back-home {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   .back-home a {
@@ -80,57 +59,53 @@
 <div class="crop-bg">
   <div class="form-wrapper">
     <h1>🌱 Crop Recommendation</h1>
-    <p class="text-center">Using your soil composition & weather conditions to suggest the best crop to sow</p>
-    
-    <form method="POST" action="/crop-recommendation">
-      <div class="mb-3">
-        <label for="N">Amount of Nitrogen (N)</label>
-        <input type="number" min="0" class="form-control" name="N" required placeholder="Enter Nitrogen level">
-      </div>
+    <p class="text-center">Enter soil data and weather to predict the best crop</p>
 
-      <div class="mb-3">
-        <label for="P">Amount of Phosphorous (P)</label>
-        <input type="number" min="0" class="form-control" name="P" required placeholder="Enter Phosphorous level">
-      </div>
+    <form id="cropForm">
+      <input type="number" name="N" class="form-control mb-2" placeholder="Nitrogen (N)" required>
+      <input type="number" name="P" class="form-control mb-2" placeholder="Phosphorous (P)" required>
+      <input type="number" name="K" class="form-control mb-2" placeholder="Potassium (K)" required>
+      <input type="number" name="temperature" step="any" class="form-control mb-2" placeholder="Temperature (°C)" required>
+      <input type="number" name="humidity" step="any" class="form-control mb-2" placeholder="Humidity (%)" required>
+      <input type="number" name="phosphore" step="any" class="form-control mb-2" placeholder="Soil pH" required>
+      <input type="number" name="rainfall" step="any" class="form-control mb-2" placeholder="Rainfall (mm)" required>
 
-      <div class="mb-3">
-        <label for="K">Amount of Potassium (K)</label>
-        <input type="number" min="0" class="form-control" name="K" required placeholder="Enter Potassium level">
-      </div>
-
-      <div class="mb-3">
-        <label for="temperature">Soil Temperature (°C)</label>
-        <input type="number" step="any" class="form-control" name="temperature" required placeholder="Enter temperature">
-      </div>
-
-      <div class="mb-3">
-        <label for="humidity">Soil Humidity (%)</label>
-        <input type="number" step="any" class="form-control" name="humidity" required placeholder="Enter humidity level">
-      </div>
-
-      <div class="mb-3">
-        <label for="phosphore">Soil pH</label>
-        <input type="number" step="any" class="form-control" name="phosphore" required placeholder="Enter soil pH">
-      </div>
-
-      <div class="mb-3">
-        <label for="rainfall">Rainfall (mm)</label>
-        <input type="number" step="any" class="form-control" name="rainfall" required placeholder="Enter rainfall amount">
-      </div>
-
-      <button type="submit" class="btn btn-success">🌾 Predict Crop</button>
+      <button type="submit" class="btn btn-success mt-3">🌾 Predict Crop</button>
     </form>
 
-    {% if result %}
-    <div class="result-box">
-       Based on the data provided, the recommended crop is: <strong>{{ result }}</strong>
-    </div>
-    {% endif %}
+    <div id="resultBox" class="result-box" style="display:none;"></div>
 
     <div class="back-home">
       <a href="/">Back to Home</a>
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById('cropForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const jsonData = {};
+    formData.forEach((val, key) => { jsonData[key] = val });
+
+    fetch('/predict-crop', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jsonData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      const box = document.getElementById('resultBox');
+      if (data.status === 'success') {
+        box.innerHTML = ` Based on your data, the recommended crop is: <strong>${data.result}</strong>`;
+        box.style.display = 'block';
+      } else {
+        box.innerHTML = ` Error: ${data.message}`;
+        box.style.display = 'block';
+      }
+    });
+  });
+</script>
 
 {% endblock %}
