@@ -7,8 +7,7 @@ from functions import img_predict, get_diseases_classes, get_crop_recommendation
 
 
 app = Flask(__name__)
-random.seed(0)
-app.config['SECRET_KEY'] = os.urandom(24)
+
 
 UPLOAD_FOLDER = 'uploads'
 STATIC_FOLDER = 'static'
@@ -119,13 +118,9 @@ def predict_crop_ajax():
         return {'status': 'error', 'message': str(e)}
 	
 
-from flask import Flask, render_template, request, redirect, url_for
-
-app = Flask(__name__)
-
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
-    mode = request.args.get('mode', 'login')  # default to login
+    mode = request.args.get('mode', 'login')
     error = None
 
     if request.method == 'POST':
@@ -139,14 +134,14 @@ def auth():
             if password != confirm:
                 error = "Passwords do not match"
             else:
-                # Save user (add your logic here)
+                # Save user logic (to database or file) here
                 return redirect(url_for('auth', mode='login'))
+
         elif mode == 'login':
-            # Check user (add your logic here)
-            return redirect(url_for('index.html'))  # Replace with your homepage route
+            # Validate user logic here
+            return redirect(url_for('index'))
 
     return render_template('auth.html', mode=mode, error=error)
-
 
 
 
