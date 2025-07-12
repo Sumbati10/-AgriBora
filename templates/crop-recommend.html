@@ -107,5 +107,61 @@
     });
   });
 </script>
+<style>
+  .insight-section {
+    display: flex;
+    justify-content: flex-start; /* use center or flex-end to change alignment */
+    padding: 40px 20px;
+  }
+
+  .insight-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .insight-video {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .insight-video iframe {
+    border-radius: 10px;
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .insight-section {
+      justify-content: center;
+      text-align: center;
+    }
+    .insight-box {
+      max-width: 90%;
+    }
+  }
+</style>
+
+<div class="insight-section">
+  <div class="insight-box">
+    <p>
+      🌾 <strong>AgriSens Crop Intelligence</strong><br><br>
+      Harness the power of data analysis to predict crop suitability, providing insights into optimal cultivation conditions. 
+      AgriSens optimizes farming decisions based on comprehensive factors like soil quality, weather, and more.
+    </p>
+  </div>
+</div>
+
+<div class="insight-video">
+  <iframe src="https://player.vimeo.com/video/866489364?h=fa60d5eaf6" width="720" height="405" frameborder="0"
+    allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+  </iframe>
+</div>
+cd
 
 {% endblock %}

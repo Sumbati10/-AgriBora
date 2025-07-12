@@ -1,66 +1,98 @@
 {% extends "index.html" %}
 {% block content %}
-<div class="container pt-5">
-  <h1 class="text-center" style="color: #8CE17D;">Crop Disease Prediction</h1>
-  <p class="text-center pt-3">Our models provide you an easy,fast and efficient way to detect diseases in your plants.
-  </p>
-</div>
-<form action="{{ url_for('find_crop_disease')}}" method="POST" enctype="multipart/form-data"
-  style="margin-top: 30px; width: 80%; text-align: center; margin: auto">
-  <br>
-  <br>
-  <br>
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-      <label>Choose a crop :</label>
-      <div class="col-md-4">
 
-        <select name="crop" class="form-control" required="required">
+<style>
+  .disease-bg {
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.9)),
+      url('{{ url_for('static', filename='images/disease.png') }}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 60px 20px;
+    min-height: 100vh;
+  }
+
+  .disease-box {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .result-section {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .result-section img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .btn-area {
+    margin-top: 30px;
+    text-align: center;
+  }
+</style>
+
+<div class="disease-bg">
+  <div class="disease-box">
+    <h2 class="text-center" style="color: #8CE17D;">Crop Disease Prediction</h2>
+    <p class="text-center">Upload a crop image and let our model detect diseases instantly.</p>
+
+    <form action="{{ url_for('find_crop_disease')}}" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label>Choose a Crop</label>
+        <select name="crop" class="form-control" required>
           {% for crop in crops %}
-          <option type="text" value="{{crop}}" data-show=".{{crop}}">{{crop}}</option>
+          <option value="{{ crop }}">{{ crop }}</option>
           {% endfor %}
         </select>
       </div>
-    </div>
-    <br />
-    <div class="row d-flex justify-content-center">
-      <label>Upload your image : </label>
-      <div class="col-md-4 pt-2">
 
-        <input class="form-control" name="file" type="file" id="formFile" onchange="preview_image(event)"
-          required="required">
-
+      <div class="mb-3">
+        <label>Upload Image</label>
+        <input class="form-control" name="file" type="file" onchange="preview_image(event)" required>
       </div>
 
-    </div>
-    <img id="output-image" class="rounded mx-auto d-block" src="{{ url_for('send_file', filename=file_name)}}"
-      onerror="this.src='./static/images/upload.jpg'"
-      style="max-width: 500px; max-height: 450px; margin-top: 30px; margin-bottom: 2px" />
-    <p style="font-style: italic">{{ file_name }}</p>
-    <br>
-    <div class="row" style="text-align:center;">
-      <div class="col-md-12">
-        <button type="submit" class="btn btn-success" value="submit">predict</button>
+      <div class="mb-3 text-center">
+        <img id="output-image" class="rounded" 
+             src="{{ url_for('send_file', filename=file_name)}}" 
+             onerror="this.src='{{ url_for('static', filename='images/upload.jpg') }}'" 
+             style="max-width: 400px; max-height: 400px;" />
+        <p style="font-style: italic">{{ file_name }}</p>
       </div>
-    </div>
 
+      <div class="text-center">
+        <button type="submit" class="btn btn-success">Predict</button>
+      </div>
+    </form>
+
+    {% if result %}
+    <div class="result-section">
+      <h3><strong>Prediction: <span style="color: green">{{ result }}</span></strong></h3>
+    </div>
+    {% endif %}
+
+    <div class="btn-area">
+      <a href="/crop-disease" class="btn btn-outline-primary">Upload Another Image</a>
+      <a href="/" class="btn btn-outline-success">Back to Home</a>
+    </div>
   </div>
+</div>
 
-</form>
-<br>
-<br>
-<br>
-
-<script type="text/javascript">
+<script>
   function preview_image(event) {
     var reader = new FileReader();
     reader.onload = function () {
-      var output = document.getElementById('output-image')
+      var output = document.getElementById('output-image');
       output.src = reader.result;
     }
     reader.readAsDataURL(event.target.files[0]);
   }
 </script>
-<hr>
 
 {% endblock %}
