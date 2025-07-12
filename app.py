@@ -62,6 +62,41 @@ def find_crop_disease():
 		result = get_diseases_classes(crop, prediction)
 
 		return render_template('disease-prediction-result.html', image_file_name=file.filename, result=result)
+	
+import requests
+
+@app.route('/weather', methods=['GET', 'POST'])
+def weather():
+	if request.method == 'POST':
+		city = request.form['city']
+		api_key = "96cd3e85fd1aa5bbbfc318b428373d8b"
+		base_url = "https://api.openweathermap.org/data/2.5/weather"
+
+		params = {
+			'q': city,
+			'appid': api_key,
+			'units': 'metric'  # to get °C
+		}
+
+		response = requests.get(base_url, params=params)
+		data = response.json()
+
+		if data.get('cod') != 200:
+			error_msg = data.get("message", "City not found.")
+			return render_template('weather.html', error=error_msg)
+
+		weather_data = {
+			'city': city,
+			'temperature': data['main']['temp'],
+			'humidity': data['main']['humidity'],
+			'pressure': data['main']['pressure'],
+			'description': data['weather'][0]['description'],
+			'icon': data['weather'][0]['icon']
+		}
+		return render_template('weather-result.html', weather=weather_data)
+
+	return render_template('weather.html')
+
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
