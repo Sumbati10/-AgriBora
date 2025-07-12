@@ -102,6 +102,21 @@ def weather():
 def send_file(filename):
 	return send_from_directory(UPLOAD_FOLDER, filename)
 
+@app.route('/predict-crop', methods=['POST'])
+def predict_crop_ajax():
+    try:
+        data = request.json
+        to_predict_list = list(map(float, [
+            data['N'], data['P'], data['K'],
+            data['temperature'], data['humidity'],
+            data['phosphore'], data['rainfall']
+        ]))
+        result = get_crop_recommendation(to_predict_list)
+        return {'status': 'success', 'result': result}
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}
+
+
 if __name__ == '__main__':
 	port=int(os.environ.get('PORT', 5000))
 	app.run(host='0.0.0.0', port=port,debug=True)
