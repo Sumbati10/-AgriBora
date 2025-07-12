@@ -1,87 +1,136 @@
 {% extends "index.html" %}
 {% block content %}
 
-<div class="container pt-5">
-  <h1 class="text-center" style="color: #8CE17D;">Crop Recommendation</h1>
-  <p class="text-center pt-3">Using your soil composition data and weather condtions we can predict the best type of
-    crop to sow</p>
-</div>
-<br>
-<br>
-<div class="container">
+<style>
+  .crop-bg {
+    background: url('{{ url_for("static", filename="images/croprecommder.png") }}') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+  }
 
+  .crop-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+  }
 
-  <div class="col-md-4 col-md-offset-4" style="float: right; margin-top: 5%; margin-right: 10%;margin-bottom: 5%;">
-    <img src="./static/images/upload-img.jpg" width="500" height="333">
+  .form-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-wrapper h1 {
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-wrapper label {
+    font-weight: bold;
+  }
+
+  .form-wrapper .btn {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .result-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: #e8f5e9;
+    border-left: 6px solid #4CAF50;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .back-home {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .back-home a {
+    padding: 10px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .back-home a:hover {
+    background-color: #388E3C;
+  }
+</style>
+
+<div class="crop-bg">
+  <div class="form-wrapper">
+    <h1>🌱 Crop Recommendation</h1>
+    <p class="text-center">Using your soil composition & weather conditions to suggest the best crop to sow</p>
+    
+    <form method="POST" action="/crop-recommendation">
+      <div class="mb-3">
+        <label for="N">Amount of Nitrogen (N)</label>
+        <input type="number" min="0" class="form-control" name="N" required placeholder="Enter Nitrogen level">
+      </div>
+
+      <div class="mb-3">
+        <label for="P">Amount of Phosphorous (P)</label>
+        <input type="number" min="0" class="form-control" name="P" required placeholder="Enter Phosphorous level">
+      </div>
+
+      <div class="mb-3">
+        <label for="K">Amount of Potassium (K)</label>
+        <input type="number" min="0" class="form-control" name="K" required placeholder="Enter Potassium level">
+      </div>
+
+      <div class="mb-3">
+        <label for="temperature">Soil Temperature (°C)</label>
+        <input type="number" step="any" class="form-control" name="temperature" required placeholder="Enter temperature">
+      </div>
+
+      <div class="mb-3">
+        <label for="humidity">Soil Humidity (%)</label>
+        <input type="number" step="any" class="form-control" name="humidity" required placeholder="Enter humidity level">
+      </div>
+
+      <div class="mb-3">
+        <label for="phosphore">Soil pH</label>
+        <input type="number" step="any" class="form-control" name="phosphore" required placeholder="Enter soil pH">
+      </div>
+
+      <div class="mb-3">
+        <label for="rainfall">Rainfall (mm)</label>
+        <input type="number" step="any" class="form-control" name="rainfall" required placeholder="Enter rainfall amount">
+      </div>
+
+      <button type="submit" class="btn btn-success">🌾 Predict Crop</button>
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+       Based on the data provided, the recommended crop is: <strong>{{ result }}</strong>
+    </div>
+    {% endif %}
+
+    <div class="back-home">
+      <a href="/">Back to Home</a>
+    </div>
   </div>
-
-  <form action="/crop-recommendation" method="POST" style="margin-top: 5%">
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="N">Amount of Azote :</label>
-      <input class="form-control" type="number" min="0" required="required" name="N" ,
-        placeholder="enter amount of azote">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="P">Amount of Phosphorous :</label>
-      <input class="form-control" type="number" min="0" id="P" name="P" required="required"
-        placeholder="enter amount of phosphore">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="K">Amount of Potassium :</label>
-      <input class="form-control" type="number" min="0" id="K" name="K" required="required"
-        placeholder="enter amount of potassium">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="temperature">Soil Temperature :</label>
-      <input class="form-control" type="number" min="0" step="any" id="temperature" name="temperature"
-        required="required" placeholder="Enter soil temperature">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="humidity">Soil Humidity :</label>
-      <input class="form-control" type="number" min="0" step="any" id="humidity" name="humidity" required="required"
-        placeholder="enter soil humidity level">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="phosphore">Soil Ph :</label>
-      <input class="form-control" type="number" min="0" step="any" id="phosphore" name="phosphore" required="required"
-        placeholder="enter soil ph">
-
-    </div>
-    <div class="col-md-4 col-md-offset-4">
-
-      <label for="rainfall">Amount of RainFall :</label>
-      <input class="form-control" type="number" min="0" step="any" id="rainfall" name="rainfall" required="required"
-        placeholder="enter amout of rain recieved">
-
-    </div>
-    <br>
-
-
-    <div class="text-center" style="padding-top: 5%">
-      <button type="submit" class="btn btn-success" value="submit">predict</button>
-    </div>
-    <br>
-    <br>
-
-  </form>
-
-
-
 </div>
-
-
-<br>
-<br>
 
 {% endblock %}
