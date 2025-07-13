@@ -163,6 +163,17 @@ def require_login():
     if request.endpoint not in allowed_routes and 'user' not in session:
         return redirect(url_for('auth', mode='login'))
 
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        # You can add logic here to email or save the message
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        success_message = "Thank you for contacting us!"
+        return render_template('contact.html', success=success_message)
+
+    return render_template('contact.html')
 
 # --------------------------
 # Run App
