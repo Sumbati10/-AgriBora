@@ -1,3 +1,9 @@
+# Build tools (needed for Render/Python 3.13+)
+setuptools>=65.0.0
+wheel>=0.40.0
+pip>=23.0
+
+# Project dependencies
 absl-py==1.0.0
 astunparse==1.6.3
 cachetools==5.0.0
