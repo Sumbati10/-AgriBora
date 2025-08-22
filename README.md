@@ -2,6 +2,11 @@
 
 <div align="center">
     <h3>Link : https://agribora-production.up.railway.app// </h3>
+    
+    Login Details
+    Kindly use this credentilas to log in
+    Name: demo
+    pasword:farm123
 </div>
 
 ![AgriBora Demo](https://github.com/Sumbati10/-AgriBora/blob/main/demo.png?raw=true)
