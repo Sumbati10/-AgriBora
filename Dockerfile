@@ -1,20 +1,24 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+# Use a stable Python runtime
+FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy dependencies first (better caching)
+COPY requirements.txt /app/
 
-# Install any needed packages specified in requirements.txt
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the world outside this container
+# Copy the rest of the code
+COPY . /app
+
+# Expose port 5000
 EXPOSE 5000
 
-# Define environment variable for Flask
+# Environment variables
 ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
 
-# Run the application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Use Gunicorn (better than flask run in production)
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
